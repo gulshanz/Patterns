@@ -1,4 +1,4 @@
-package com.gulshan.patterns;
+package com.gulshan.patterns.util;
 
 // acts as database or network
 // model

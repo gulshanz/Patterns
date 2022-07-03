@@ -18,13 +18,20 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         btn = findViewById(R.id.btn);
         textView = findViewById(R.id.textView);
+
+        btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                displayAppText();
+            }
+        });
     }
 
     public MyModel GetAppFromModel() {
         return new MyModel("Master coding app", " 9000", 5);
     }
 
-    public void displayAppText(View view) {
+    public void displayAppText() {
         MyModel model = GetAppFromModel();
         textView.setText(model.getAppName() + " " + "Downloads" + model.getAppDownloads());
     }

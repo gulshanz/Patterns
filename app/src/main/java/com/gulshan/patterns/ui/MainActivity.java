@@ -1,21 +1,21 @@
 package com.gulshan.patterns.ui;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.TextView;
 
-import com.gulshan.patterns.R;
-import com.gulshan.patterns.util.MyModel;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.ViewModelProvider;
 
-public class MainActivity extends AppCompatActivity implements AppView {
+import com.gulshan.patterns.R;
+
+public class MainActivity extends AppCompatActivity {
 
     Button btn;
     TextView textView;
 
-    // linking activity with presenter
-    AppPresenter appPresenter;
+    // connecting mainactivity with viewmodel and listening to livedata
+    AppViewModel appViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,29 +24,22 @@ public class MainActivity extends AppCompatActivity implements AppView {
         btn = findViewById(R.id.btn);
         textView = findViewById(R.id.textView);
 
-        appPresenter = new AppPresenter(this);
+        appViewModel = new ViewModelProvider(this).get(AppViewModel.class);
 
-        btn.setOnClickListener(view -> {
-            // calling the presenter to get data from db
-            // no linkage between activity and model
-            // MainActivity is handling only UI(View)
-            // all logic occurs at presenter
-            appPresenter.getAppDetails();
+        btn.setOnClickListener(view -> appViewModel.getAppName());
+
+        // listening and observing changes to livedata
+        appViewModel.mutableLiveData.observe(this, s -> {
+            // any change in live data to this
+            textView.setText(s);
         });
 
-        // instantiating the presenter
     }
 
 
-    @Override
-    public void onGetAppName(String name) {
-        textView.setText(name);
-    }
-
-
-    //MVP
-    // model: MyModel
-    // view: MainActivity (Only Dealing with UI)
-    // presenter: AppPresenter (Like waiter)
+    // MVVM
+    // M: MyModel
+    // V: MainActivity responsible for user input and output
+    // VM: AppViewModel processing and sending data from model to view
 
 }
